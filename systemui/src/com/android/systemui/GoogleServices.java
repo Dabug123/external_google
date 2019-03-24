@@ -4,9 +4,8 @@ import com.android.systemui.SysUiServiceProvider;
 import com.android.systemui.VendorServices;
 import com.android.systemui.R;
 import com.android.systemui.statusbar.phone.StatusBar;
-// import com.google.android.systemui.ambientmusic.AmbientIndicationContainer;
-// import com.google.android.systemui.ambientmusic.AmbientIndicationService;
 import com.google.android.systemui.dreamliner.DockObserver;
+import com.google.android.systemui.dreamliner.DreamlinerContext;
 import com.google.android.systemui.elmyra.ElmyraContext;
 import com.google.android.systemui.elmyra.ElmyraService;
 import com.google.android.systemui.elmyra.ServiceConfigurationGoogle;
@@ -24,17 +23,12 @@ public class GoogleServices extends VendorServices {
     }
 
     public void start() {
-        StatusBar statusBar = (StatusBar) SysUiServiceProvider.getComponent(this.mContext, StatusBar.class);
-        // AmbientIndicationContainer ambientIndicationContainer = (AmbientIndicationContainer) statusBar.getStatusBarWindow().findViewById(R.id.ambient_indication_container);
-        // ambientIndicationContainer.initializeView(statusBar);
-        // addService(new AmbientIndicationService(this.mContext, ambientIndicationContainer));
-        // addService(new DisplayCutoutEmulationAdapter(this.mContext));
-        if (new ElmyraContext(this.mContext).isAvailable()) {
-            addService(new ElmyraService(this.mContext, new ServiceConfigurationGoogle(this.mContext)));
+        StatusBar statusBar = (StatusBar) SysUiServiceProvider.getComponent(mContext, StatusBar.class);
+        if (new ElmyraContext(mContext).isAvailable()) {
+            addService(new ElmyraService(mContext, new ServiceConfigurationGoogle(mContext)));
         }
-        // Dreamliner service
-        // TODO: do not start this service for every Pixel, check for a
-        // property or something.
-        addService(new DockObserver(mContext));
+        if (new DreamlinerContext(mContext).isAvailable()) {
+            addService(new DockObserver(mContext));
+        }
     }
 }
